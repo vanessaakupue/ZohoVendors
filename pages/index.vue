@@ -17,7 +17,7 @@
       </section>
 
       <section id="createVendor">
-        <form @submit.prevent="createVendor">
+        <form method="POST" @submit.prevent>
           <label for="vendorName">Vendor Name</label>
           <input type="text" id="vendorName" v-model="vendorForm.Vendor_Name" required>
 
@@ -54,7 +54,7 @@
           <label for="glAccount">GL Account</label>
           <input type="text" id="glAccount" v-model="vendorForm.GL_Account" >
 
-          <button type="submit">Create Vendor</button>
+          <button type="submit" @click="createVendor">Create Vendor</button>
         </form>
       </section>
     </div>
@@ -101,39 +101,44 @@ export default {
     },
     async createVendor() {
       try {
-        const payload = {
+        const vendorData = {
           // data: [
           // {  
-            Owner: { id: this.ownerId },
-            Vendor_Name: this.vendorForm.Vendor_Name,
-            Email: this.vendorForm.Email,
-            Category: this.vendorForm.Category,
-            Description: this.vendorForm.Description,
-            Website: this.vendorForm.Website,
-            Phone: this.vendorForm.Phone,
-            Street: this.vendorForm.Street,
-            City: this.vendorForm.City,
-            State: this.vendorForm.State,
-            Country: this.vendorForm.Country,
-            Zip_Code: this.vendorForm.Zip_Code,
-            GL_Account: this.vendorForm.GL_Account
+            Owner: { id: '6496966000000488001' },
+            Vendor_Name: 'fummie',
+            Email: 'fummie@gmail.com',
+            Category: 'how to',
+            Description: 'answers questions',
+            Website: 'http://www.fumfum.com',
+            Phone: '09024469938',
+            Street: 'obosi street',
+            City: 'enugu',
+            State: 'enugu',
+            Country: 'nigeria',
+            Zip_Code: '400009',
+            GL_Account: 'status'
         //   }
         // ]
         };
 
         const headers = {
-          Authorization: `Zoho-oauthtoken ${this.$config.AccessToken}`,
-          // 'Content-type': 'application/json'
+          'Authorization': `Zoho-oauthtoken ${this.$config.AccessToken}`,
+          // 'Content-Type': 'application/json',
+          // 'Accept': 'application/json',
         };
 
-        console.log('Sending payload:', payload);
-        console.log('Request headers:', headers);
+        // console.log('Sending payload:', payload);
+        // console.log('Request headers:', headers);
 
-        const response = await this.$axios.post('/api/Vendors', payload , {
+        const response = await this.$axios.$post('/api/Vendors', {data: [vendorData]} , {
           headers
         });
         console.log("Vendor created successfully:", response.data);
-        console.log('Response received:', JSON.stringify(response.data));
+        console.log('Response received:', response.data);
+
+        Object.keys(this.vendorForm).forEach(key => {
+          this.vendorForm[key] = '';
+        });
         
         await this.fetchVendors();
       } catch (error) {
