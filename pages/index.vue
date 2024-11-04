@@ -82,6 +82,11 @@ export default {
       }
     };
   },
+  computed: {
+    ownerId() {
+      return this.vendors.length > 0 ? this.vendors[0].Owner.id : null;
+    }
+  },
   methods: {
     async fetchVendors() {
       try {
@@ -97,9 +102,9 @@ export default {
     async createVendor() {
       try {
         const payload = {
-          data: [
-          {  
-            Owner: { id: this.vendors[0].Owner.id },
+          // data: [
+          // {  
+            Owner: { id: this.ownerId },
             Vendor_Name: this.vendorForm.Vendor_Name,
             Email: this.vendorForm.Email,
             Category: this.vendorForm.Category,
@@ -112,13 +117,13 @@ export default {
             Country: this.vendorForm.Country,
             Zip_Code: this.vendorForm.Zip_Code,
             GL_Account: this.vendorForm.GL_Account
-          }
-        ]
+        //   }
+        // ]
         };
 
         const headers = {
           Authorization: `Zoho-oauthtoken ${this.$config.AccessToken}`,
-          'Content-type': 'application/json'
+          // 'Content-type': 'application/json'
         };
 
         console.log('Sending payload:', payload);
